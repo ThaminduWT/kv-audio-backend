@@ -19,3 +19,81 @@ export function addReview(req,res){
         res.json({message : "Revied added failed"})
     });
 }
+
+export function getReviews(req,res){
+
+   const user = req.user;
+
+   if(user == null || user.role != "admin"){
+    Review.find({isApproved : true}).then((review)=>{
+        res.json(review)
+    })
+    return;
+   }
+
+   if(user.role == "admin"){
+    Review.find().then((review)=>{
+        res.json(review)
+    })
+   }
+
+    
+}
+
+export function deleteReview(req,res){
+    const email = req.params.email;
+
+   if(req.user == null){
+    res.status(401).json({message : "Please login and try again"})
+    return;
+   }
+
+   if(req.user == "admin"){
+    Review.deleteOne({email:email}).then(()=>{
+        res.json({message : "Review delete successfully"})
+    }).catch(()=>{
+        res.status(500).json({message : "Review deletion failed"})
+    })
+    return;
+
+   }
+
+   if(req.user.email == email){
+    Review.deleteOne({email:email}).then(()=>{
+        res.json({message : "Review delete successfully"})
+    }).catch(()=>{
+        res.status(500).json({message : "Review deletion failed"})
+    })
+   }else{
+    res.status(403).json({message : "You are not authorized to perform this action"})
+   }
+
+  
+   
+}
+
+export function approveReview(req,res){
+    const email = req.params.email;
+
+    if(req.user == null){
+        res.json({message : "Please login and try again"})
+    }
+
+    if(req.user.role == "admin"){
+        Review.updateOne(
+        {
+           email : email,
+        },
+         {
+           isApproved : true,     
+         }).then(()=>{
+            res.json({message : "Review approved successfully"})
+         }).catch(()=>{
+            res.json({error : "Review approvel failed"})
+         })
+    }else{
+        res.json({message : "You are not and admin. only admins can approve the reviews."})
+    }
+
+
+}

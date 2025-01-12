@@ -15,12 +15,12 @@ export function registerUser(req,res){
     newUser.save().then(()=>{
         res.json({
             message : "User registered successfully"
-        }).catch((error)=>{
-            res.status(500).json({
-                erroe : "User registeration failed"
-            })
         })
 
+    }).catch(()=>{
+        res.status(500).json({
+            message : "User registeration failed"
+        })
     })
 
    
@@ -32,6 +32,7 @@ export function loginUser(req,res){
     User.findOne({
         email : data.email
     }).then((user)=>{
+        
         if(user == null){
             res.status(404).json({
                 error : "User not found"
@@ -45,7 +46,8 @@ export function loginUser(req,res){
                      firstName : user.firstName,
                      lastName : user.lastName,
                      email : user.email,
-                     role : user.role
+                     role : user.role,
+                     profilePicture : user.profilePicture
 
                 },process.env.JWT_SECRET)
                 res.json({message : "Login successflly",token})

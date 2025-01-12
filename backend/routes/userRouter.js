@@ -3,8 +3,8 @@ import { registerUser,loginUser } from "../controller/userController.js";
 
 const userRouter = express.Router()
 
-userRouter.post("/resgister",registerUser)
-userRouter.post("/loginUser",loginUser)
+userRouter.post("/register",registerUser)
+userRouter.post("/login",loginUser)
 
 export default userRouter
 

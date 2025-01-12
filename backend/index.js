@@ -23,13 +23,14 @@ app.use((req,res,next)=>{
        jwt.verify(token,process.env.JWT_SECRET,(err,decoded)=>{
          if(!err){
             req.user = decoded
-            
+            console.log(req.user)
 
          }
 
        })
     }
     next()
+    
 })
 
 let mongoUrl = process.env.MONGO_URL
@@ -44,7 +45,7 @@ connection.once("open",()=>{
 
 app.use("/api/users",userRouter)
 app.use("/api/products",productRoute)
-app.use("/api/review",reviewRouter)
+app.use("/api/reviews",reviewRouter)
 
 app.listen(3000,()=>{
    console.log("Sever is running port 3000")

@@ -4,59 +4,61 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
 dotenv.config()
-export function registerUser(req,res){
+export async function registerUser(req, res) {
 
     const data = req.body;
+    try {
+        data.password = bcrypt.hashSync(data.password, 10)
 
-    data.password = bcrypt.hashSync(data.password,10)
-    
-    const newUser = new User(data);
+        const newUser = new User(data);
 
-    newUser.save().then(()=>{
+        await newUser.save()
         res.json({
-            message : "User registered successfully"
+            message: "User registered successfully"
         })
 
-    }).catch(()=>{
-        res.status(500).json({
-            message : "User registeration failed"
-        })
-    })
+    } catch (error) {
+        res.status(500).json({ error: "Failed to user register" })
+    }
 
-   
+
 }
 
-export function loginUser(req,res){
-     const data = req.body
+export async function loginUser(req, res) {
+    const data = req.body
+    try {
+        const user = await User.findOne({
+            email: data.email
+        })
 
-    User.findOne({
-        email : data.email
-    }).then((user)=>{
-        
-        if(user == null){
+        if (user == null) {
             res.status(404).json({
-                error : "User not found"
+                error: "User not found"
             })
-        }else{
-            
-            const isPasswordCorrect = bcrypt.compareSync(data.password,user.password)
+        } else {
 
-            if(isPasswordCorrect){
+            const isPasswordCorrect = bcrypt.compareSync(data.password, user.password)
+
+            if (isPasswordCorrect) {
                 const token = jwt.sign({
-                     firstName : user.firstName,
-                     lastName : user.lastName,
-                     email : user.email,
-                     role : user.role,
-                     profilePicture : user.profilePicture
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    role: user.role,
+                    profilePicture: user.profilePicture
 
-                },process.env.JWT_SECRET)
-                res.json({message : "Login successflly",token})
-            }else{
-                 res.status(401).json({
-                    error : "Loging failed"
-                 })
+                }, process.env.JWT_SECRET)
+                res.json({ message: "Login successflly", token })
+            } else {
+                res.status(401).json({
+                    error: "Loging failed"
+                })
             }
         }
-    })
+
+
+    } catch (error) {
+        res.status(500).json({ error: "Failed to login" })
+    }
 
 }

@@ -23,7 +23,7 @@ app.use((req,res,next)=>{
        jwt.verify(token,process.env.JWT_SECRET,(err,decoded)=>{
          if(!err){
             req.user = decoded
-            console.log(req.user)
+
 
          }
 
@@ -50,3 +50,11 @@ app.use("/api/reviews",reviewRouter)
 app.listen(3000,()=>{
    console.log("Sever is running port 3000")
 })
+
+
+// "email": "john.doe1@example.com",  customer
+// "password": "123",
+
+
+// "email": "john.doe2@example.com", admin
+// "password": "123",

@@ -30,6 +30,7 @@ export async function addInquiry(req,res){
         }
 
     }catch(erroe){
+       
         res.status(500).json({ message: "Failed to added inquiry" });
     }
 }

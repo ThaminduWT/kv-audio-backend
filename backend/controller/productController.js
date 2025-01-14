@@ -77,8 +77,9 @@ export async function updateProduct(req, res) {
 export async function deleteProduct(req, res) {
     try {
         if (isItAdmin(req)) {
-            
+
             const key = req.params.key;
+
             const result = await Product.deleteOne({ key: key });
 
             if (result.deletedCount === 0) {
@@ -89,6 +90,8 @@ export async function deleteProduct(req, res) {
 
                 res.json({ message: "Product delete successfully" })
             }
+
+            
 
         }
         else {

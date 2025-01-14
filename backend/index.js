@@ -6,6 +6,7 @@ import productRoute from "./routes/productRouter.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import reviewRouter from "./routes/reviewRouter.js";
+import inquiryRoute from "./routes/inquiryRouter.js"
 
 
 dotenv.config();
@@ -46,6 +47,7 @@ connection.once("open",()=>{
 app.use("/api/users",userRouter)
 app.use("/api/products",productRoute)
 app.use("/api/reviews",reviewRouter)
+app.use("/api/inquiry",inquiryRoute)
 
 app.listen(3000,()=>{
    console.log("Sever is running port 3000")

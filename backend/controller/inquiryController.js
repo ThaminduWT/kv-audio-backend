@@ -5,7 +5,7 @@ import { isItAdmin, isItCustomer } from "./userController.js";
 export async function addInquiry(req, res) {
     try {
         if (isItCustomer(req)) {
-            confirm.log(req.body)
+          
             const data = req.body
             data.email = req.user.email
             data.phone = req.user.phone
